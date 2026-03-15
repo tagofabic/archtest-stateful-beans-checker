@@ -38,10 +38,20 @@ This just provides that extra guardrail that might be missed during the Code Rev
 
 ## Installation
 
-Add the modules you need to your Maven `pom.xml` (test scope):
+Add the modules you need to your Maven `pom.xml`.
 
 ```xml
-<!-- Core engine — always required -->
+<!--
+  Annotations only — add as a compile dependency so your production beans
+  can use @ExcludeFromStatefulCheck without pulling in test dependencies.
+-->
+<dependency>
+    <groupId>dev.tagofabic</groupId>
+    <artifactId>stateful-beans-checker-annotations</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+</dependency>
+
+<!-- Core engine — test scope -->
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-core</artifactId>
@@ -49,7 +59,7 @@ Add the modules you need to your Maven `pom.xml` (test scope):
     <scope>test</scope>
 </dependency>
 
-<!-- JUnit 5 integration (package scan mode) -->
+<!-- JUnit 5 integration (package scan mode) — test scope -->
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-junit5</artifactId>
@@ -57,7 +67,7 @@ Add the modules you need to your Maven `pom.xml` (test scope):
     <scope>test</scope>
 </dependency>
 
-<!-- Spring Boot integration (@SpringBootTest mode) -->
+<!-- Spring Boot integration (@SpringBootTest mode) — test scope -->
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-spring</artifactId>
@@ -74,17 +84,21 @@ Add the modules you need to your Maven `pom.xml` (test scope):
 
 ### Option 1 — Package scan (no Spring context)
 
-Annotate an empty JUnit 5 test class. The extension runs before any tests and fails immediately if violations are found.
+Annotate a JUnit 5 test class and add a placeholder `@Test` method so your IDE discovers and runs it. The extension fires in `@BeforeAll`, before any test methods execute.
 
 ```java
 @StatefulBeanCheck(
-    packages      = {"com.myapp.service", "com.myapp.component"},
-    lombokAware   = true
+    packages    = {"com.myapp.service", "com.myapp.component"},
+    lombokAware = true
 )
-class StatefulBeanArchTest {}
-```
+class StatefulBeanArchTest {
 
-No test methods are needed. The `@StatefulBeanCheck` annotation drives everything.
+    @Test
+    void statefulBeansCheck() {
+        // Violations are caught by @StatefulBeanCheck before this runs
+    }
+}
+```
 
 ---
 
@@ -160,20 +174,32 @@ All options are available on both `@StatefulBeanCheck`, `@SpringStatefulBeanTest
 
 ## Excluding a Specific Bean
 
-In cases (hopefully rare) that you do deem a specific Bean as safe or intentional, you can exclude it in the checking
-process.
+In cases (hopefully rare) where a bean or field is intentionally mutable, you can exclude it from the check using `@ExcludeFromStatefulCheck` from the `stateful-beans-checker-annotations` dependency.
 
-Place `@ExcludeFromCheck` on the bean class when mutable state is intentional:
+**Class-level** — skips the entire bean:
 
 ```java
-@ExcludeFromCheck(reason = "Thread-safe via ConcurrentHashMap internally")
+@ExcludeFromStatefulCheck(reason = "Thread-safe via ConcurrentHashMap internally")
 @Service
 public class MetricsCache {
     private final Map<String, Long> counters = new ConcurrentHashMap<>();
 }
 ```
 
-The `reason` field is mandatory documentation — it forces an explicit justification at the call site.
+**Field-level** — skips a single field while the rest of the bean is still checked:
+
+```java
+@Service
+public class OrderService {
+
+    @ExcludeFromStatefulCheck(reason = "Intentional cache, access is synchronised externally")
+    private List<Order> recentOrders;
+
+    private final OrderRepository repository; // still checked
+}
+```
+
+The `reason` field forces an explicit justification at the call site.
 
 ---
 
@@ -223,11 +249,12 @@ StatefulBeanCheckExtension  ──(BeforeAll)──►  StatefulBeanChecker
 
 ## Module Structure
 
-| Module | Purpose |
-|---|---|
-| `stateful-beans-checker-core` | Pure analysis engine — no JUnit or Spring context dependency |
-| `stateful-beans-checker-junit5` | `@StatefulBeanCheck` annotation + JUnit 5 extension |
-| `stateful-beans-checker-spring` | `@SpringStatefulBeanTest` + `@SpringBootTest` integration |
+| Module | Scope | Purpose |
+|---|---|---|
+| `stateful-beans-checker-annotations` | compile | Zero-dep annotations (`@ExcludeFromStatefulCheck`) for production code |
+| `stateful-beans-checker-core` | test | Pure analysis engine — no JUnit or Spring context dependency |
+| `stateful-beans-checker-junit5` | test | `@StatefulBeanCheck` annotation + JUnit 5 extension |
+| `stateful-beans-checker-spring` | test | `@SpringStatefulBeanTest` + `@SpringBootTest` integration |
 
 ---
 

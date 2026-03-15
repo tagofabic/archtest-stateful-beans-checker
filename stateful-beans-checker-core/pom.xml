@@ -14,6 +14,12 @@
         No JUnit or Spring context dependency — pure reflection and bytecode analysis.</description>
 
     <dependencies>
+        <!-- Annotations module — provides @ExcludeFromStatefulCheck -->
+        <dependency>
+            <groupId>dev.tagofabic</groupId>
+            <artifactId>stateful-beans-checker-annotations</artifactId>
+        </dependency>
+
         <!-- ASM for bytecode-level field inspection -->
         <dependency>
             <groupId>org.ow2.asm</groupId>

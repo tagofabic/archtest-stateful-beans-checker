@@ -18,6 +18,10 @@
     <dependencies>
         <dependency>
             <groupId>dev.tagofabic</groupId>
+            <artifactId>stateful-beans-checker-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.tagofabic</groupId>
             <artifactId>stateful-beans-checker-core</artifactId>
         </dependency>
         <dependency>

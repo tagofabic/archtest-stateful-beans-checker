@@ -3,7 +3,6 @@ package io.github.statefulbeans.junit5.extension;
 import io.github.statefulbeans.core.StatefulBeanChecker;
 import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.AnalysisResult;
-import io.github.statefulbeans.junit5.annotation.ExcludeFromCheck;
 import io.github.statefulbeans.junit5.annotation.StatefulBeanCheck;
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,7 +43,7 @@ public class StatefulBeanCheckExtension implements BeforeAllCallback {
         StatefulBeanCheck annotation = testClass.getAnnotation(StatefulBeanCheck.class);
         if (annotation == null) return;
 
-        StatefulBeanCheckConfig config = buildConfig(annotation, testClass);
+        StatefulBeanCheckConfig config = buildConfig(annotation);
         StatefulBeanChecker checker = new StatefulBeanChecker(config);
 
         AnalysisResult result = runAnalysis(checker, context, annotation);
@@ -65,21 +64,16 @@ public class StatefulBeanCheckExtension implements BeforeAllCallback {
 
     // -------------------------------------------------------------------------
 
-    private StatefulBeanCheckConfig buildConfig(StatefulBeanCheck annotation, Class<?> testClass) {
-        StatefulBeanCheckConfig.Builder builder =
-                StatefulBeanCheckConfig.builder()
-                        .packages(annotation.packages())
-                        .excludePackages(annotation.excludePackages())
-                        .excludeAnnotations(annotation.excludeAnnotations())
-                        .excludeClassNames(annotation.excludeClasses())
-                        .lombokAware(annotation.lombokAware())
-                        .allowInjectedFields(annotation.allowInjectedFields())
-                        .allowThreadLocalFields(annotation.allowThreadLocalFields());
-
-        // Always exclude classes annotated with @ExcludeFromCheck
-        builder.excludeAnnotations(ExcludeFromCheck.class.getName());
-
-        return builder.build();
+    private StatefulBeanCheckConfig buildConfig(StatefulBeanCheck annotation) {
+        return StatefulBeanCheckConfig.builder()
+                .packages(annotation.packages())
+                .excludePackages(annotation.excludePackages())
+                .excludeAnnotations(annotation.excludeAnnotations())
+                .excludeClassNames(annotation.excludeClasses())
+                .lombokAware(annotation.lombokAware())
+                .allowInjectedFields(annotation.allowInjectedFields())
+                .allowThreadLocalFields(annotation.allowThreadLocalFields())
+                .build();
     }
 
     @SuppressWarnings("unchecked")

@@ -1,5 +1,6 @@
 package io.github.statefulbeans.core.analyzer;
 
+import io.github.statefulbeans.annotation.ExcludeFromStatefulCheck;
 import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.BeanViolation;
 import io.github.statefulbeans.core.model.FieldViolation;
@@ -71,6 +72,9 @@ public class BeanClassAnalyzer {
     // -------------------------------------------------------------------------
 
     private boolean isExcluded(Class<?> clazz, StatefulBeanCheckConfig config) {
+        // Excluded by @ExcludeFromStatefulCheck on the class
+        if (clazz.isAnnotationPresent(ExcludeFromStatefulCheck.class)) return true;
+
         // Excluded by exact class name
         if (config.getExcludedClasses().contains(clazz.getName())) return true;
 

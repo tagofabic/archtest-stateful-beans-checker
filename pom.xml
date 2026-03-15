@@ -12,6 +12,7 @@
         under high-throughput concurrent environments.</description>
 
     <modules>
+        <module>stateful-beans-checker-annotations</module>
         <module>stateful-beans-checker-core</module>
         <module>stateful-beans-checker-junit5</module>
         <module>stateful-beans-checker-spring</module>
@@ -39,6 +40,11 @@
     <dependencyManagement>
         <dependencies>
             <!-- Internal modules -->
+            <dependency>
+                <groupId>dev.tagofabic</groupId>
+                <artifactId>stateful-beans-checker-annotations</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>dev.tagofabic</groupId>
                 <artifactId>stateful-beans-checker-core</artifactId>

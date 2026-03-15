@@ -3,7 +3,6 @@ package io.github.statefulbeans.spring.extension;
 import io.github.statefulbeans.core.StatefulBeanChecker;
 import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.AnalysisResult;
-import io.github.statefulbeans.junit5.annotation.ExcludeFromCheck;
 import io.github.statefulbeans.spring.annotation.SpringStatefulBeanTest;
 import io.github.statefulbeans.spring.context.SpringBeanExtractor;
 import java.util.Map;
@@ -73,8 +72,6 @@ public class SpringStatefulBeanTestExtension implements BeforeAllCallback {
                 .allowThreadLocalFields(annotation.allowThreadLocalFields())
                 .excludeAnnotations(annotation.excludeAnnotations())
                 .excludeClassNames(annotation.excludeClasses())
-                // Always honour @ExcludeFromCheck on bean classes
-                .excludeAnnotations(ExcludeFromCheck.class.getName())
                 .build();
     }
 }

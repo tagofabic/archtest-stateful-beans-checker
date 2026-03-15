@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.tagofabic</groupId>
+        <artifactId>stateful-beans-checker-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>stateful-beans-checker-annotations</artifactId>
+    <name>Stateful Beans Checker - Annotations</name>
+    <description>Zero-dependency annotations for stateful-beans-checker.
+        Add this as a compile dependency so production bean classes can use
+        @ExcludeFromStatefulCheck without pulling in test or analysis dependencies.</description>
+
+    <!-- No dependencies — intentionally empty -->
+
+</project>

@@ -1,5 +1,6 @@
 package io.github.statefulbeans.core.analyzer;
 
+import io.github.statefulbeans.annotation.ExcludeFromStatefulCheck;
 import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.FieldViolation;
 import io.github.statefulbeans.core.model.ViolationType;
@@ -57,6 +58,11 @@ public class FieldAnalyzer {
 
             // Skip injection-annotated fields if configured to allow them
             if (config.isAllowInjectedFields() && isInjectionField(field)) {
+                continue;
+            }
+
+            // Skip fields explicitly excluded via @ExcludeFromStatefulCheck
+            if (field.isAnnotationPresent(ExcludeFromStatefulCheck.class)) {
                 continue;
             }
 
