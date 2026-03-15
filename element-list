@@ -1,0 +1,11 @@
+io.github.statefulbeans.annotation
+io.github.statefulbeans.core
+io.github.statefulbeans.core.analyzer
+io.github.statefulbeans.core.config
+io.github.statefulbeans.core.model
+io.github.statefulbeans.core.util
+io.github.statefulbeans.junit5.annotation
+io.github.statefulbeans.junit5.extension
+io.github.statefulbeans.spring.annotation
+io.github.statefulbeans.spring.context
+io.github.statefulbeans.spring.extension
