@@ -5,6 +5,24 @@
 A lightweight, ArchUnit-style test library that detects stateful or mutable Spring Beans that are unsafe under high concurrency. 
 Works with **package scanning** (no Spring context required) or **live `ApplicationContext` inspection** via `@SpringBootTest`.
 
+--- 
+
+## Contents
+
+- [Why](#why)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Option 1 — Package scan (no Spring context)](#option-1--package-scan-no-spring-context)
+  - [Option 2 — Spring context (@SpringBootTest)](#option-2--spring-context-springboottest)
+  - [Option 3 — Programmatic API](#option-3--programmatic-api)
+- [What gets flagged](#what-gets-flagged)
+- [Configuration reference](#configuration-reference)
+- [Excluding a Specific Bean](#excluding-a-specific-bean)
+- [Example failure output](#example-failure-output)
+- [How it Works](#how-it-works)
+- [Module Structure](#module-structure)
+- [License](#license)
+
 ---
 
 ## Why
@@ -139,7 +157,10 @@ All options are available on both `@StatefulBeanCheck`, `@SpringStatefulBeanTest
 
 ---
 
-## Excluding a specific bean
+## Excluding a Specific Bean
+
+In cases (hopefully rare) that you do deem a specific Bean as safe or intentional, you can exclude it in the checking
+process.
 
 Place `@ExcludeFromCheck` on the bean class when mutable state is intentional:
 
@@ -170,7 +191,7 @@ StatefulBeanChecker found 2 violation(s) across 47 beans:
 
 ---
 
-## How it works
+## How it Works
 
 ```
 @StatefulBeanCheck / @SpringStatefulBeanTest
@@ -199,7 +220,7 @@ StatefulBeanCheckExtension  ──(BeforeAll)──►  StatefulBeanChecker
 
 ---
 
-## Module structure
+## Module Structure
 
 | Module | Purpose |
 |---|---|
