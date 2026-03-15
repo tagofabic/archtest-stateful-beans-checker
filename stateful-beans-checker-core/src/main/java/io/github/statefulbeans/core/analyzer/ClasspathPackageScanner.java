@@ -1,8 +1,5 @@
 package io.github.statefulbeans.core.analyzer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -11,13 +8,14 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Scans the current classpath for classes in the given packages, without
- * requiring a Spring {@code ApplicationContext}.
+ * Scans the current classpath for classes in the given packages, without requiring a Spring {@code
+ * ApplicationContext}.
  *
- * <p>Supports both exploded directory layouts (typical IDE/Maven Surefire runs)
- * and JAR files.</p>
+ * <p>Supports both exploded directory layouts (typical IDE/Maven Surefire runs) and JAR files.
  */
 public class ClasspathPackageScanner {
 
@@ -33,9 +31,7 @@ public class ClasspathPackageScanner {
         this.classLoader = classLoader;
     }
 
-    /**
-     * Returns all classes found under the given package (recursively).
-     */
+    /** Returns all classes found under the given package (recursively). */
     public List<Class<?>> scanPackage(String packageName) throws IOException {
         String path = packageName.replace('.', '/');
         Enumeration<URL> resources = classLoader.getResources(path);
@@ -53,7 +49,10 @@ public class ClasspathPackageScanner {
                 String filePath = jarPath.substring(5, jarPath.indexOf('!'));
                 scanJar(filePath, path, classes);
             } else {
-                log.warn("Unsupported URL protocol '{}' for package scanning: {}", protocol, resource);
+                log.warn(
+                        "Unsupported URL protocol '{}' for package scanning: {}",
+                        protocol,
+                        resource);
             }
         }
         return classes;
@@ -71,8 +70,10 @@ public class ClasspathPackageScanner {
             if (file.isDirectory()) {
                 scanDirectory(file, packageName + "." + file.getName(), result);
             } else if (file.getName().endsWith(".class")) {
-                String className = packageName + '.'
-                        + file.getName().substring(0, file.getName().length() - 6);
+                String className =
+                        packageName
+                                + '.'
+                                + file.getName().substring(0, file.getName().length() - 6);
                 loadClass(className).ifPresent(result::add);
             }
         }

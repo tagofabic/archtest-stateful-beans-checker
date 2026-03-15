@@ -4,7 +4,6 @@ import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.FieldViolation;
 import io.github.statefulbeans.core.model.ViolationType;
 import io.github.statefulbeans.core.util.AnnotationNames;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -12,22 +11,33 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Inspects the declared fields of a class and produces {@link FieldViolation}s
- * for any field that represents mutable state unsuitable for a shared Spring Bean.
+ * Inspects the declared fields of a class and produces {@link FieldViolation}s for any field that
+ * represents mutable state unsuitable for a shared Spring Bean.
  */
 public class FieldAnalyzer {
 
-    private static final Set<String> MUTABLE_COLLECTION_TYPES = Set.of(
-            "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
-            "java.util.HashMap", "java.util.LinkedHashMap", "java.util.TreeMap",
-            "java.util.HashSet", "java.util.LinkedHashSet", "java.util.TreeSet",
-            "java.util.ArrayDeque", "java.util.PriorityQueue"
-    );
+    private static final Set<String> MUTABLE_COLLECTION_TYPES =
+            Set.of(
+                    "java.util.ArrayList",
+                    "java.util.LinkedList",
+                    "java.util.Vector",
+                    "java.util.HashMap",
+                    "java.util.LinkedHashMap",
+                    "java.util.TreeMap",
+                    "java.util.HashSet",
+                    "java.util.LinkedHashSet",
+                    "java.util.TreeSet",
+                    "java.util.ArrayDeque",
+                    "java.util.PriorityQueue");
 
-    private static final Set<String> MUTABLE_COLLECTION_INTERFACES = Set.of(
-            "java.util.List", "java.util.Map", "java.util.Set",
-            "java.util.Collection", "java.util.Deque", "java.util.Queue"
-    );
+    private static final Set<String> MUTABLE_COLLECTION_INTERFACES =
+            Set.of(
+                    "java.util.List",
+                    "java.util.Map",
+                    "java.util.Set",
+                    "java.util.Collection",
+                    "java.util.Deque",
+                    "java.util.Queue");
 
     public List<FieldViolation> analyzeFields(Class<?> clazz, StatefulBeanCheckConfig config) {
         List<FieldViolation> violations = new ArrayList<>();
@@ -52,14 +62,14 @@ public class FieldAnalyzer {
 
             // Check: non-final field
             if (!Modifier.isFinal(field.getModifiers())) {
-                violations.add(new FieldViolation(
-                        field.getName(),
-                        field.getType().getName(),
-                        ViolationType.NON_FINAL_FIELD,
-                        String.format(
-                                "Field is not final. Non-final instance fields in a Spring Bean " +
-                                "can be mutated concurrently. Declare it final or use constructor injection.")
-                ));
+                violations.add(
+                        new FieldViolation(
+                                field.getName(),
+                                field.getType().getName(),
+                                ViolationType.NON_FINAL_FIELD,
+                                String.format(
+                                        "Field is not final. Non-final instance fields in a Spring Bean "
+                                                + "can be mutated concurrently. Declare it final or use constructor injection.")));
             }
 
             // Check: mutable collection type (even if final, the collection itself is mutable)
@@ -67,13 +77,13 @@ public class FieldAnalyzer {
 
             // Check: Lombok @Setter on individual field
             if (config.isLombokAware() && hasAnnotation(field, AnnotationNames.LOMBOK_SETTER)) {
-                violations.add(new FieldViolation(
-                        field.getName(),
-                        field.getType().getName(),
-                        ViolationType.LOMBOK_SETTER,
-                        "Field carries @lombok.Setter — a public setter is generated, " +
-                        "making this field mutable after construction."
-                ));
+                violations.add(
+                        new FieldViolation(
+                                field.getName(),
+                                field.getType().getName(),
+                                ViolationType.LOMBOK_SETTER,
+                                "Field carries @lombok.Setter — a public setter is generated, "
+                                        + "making this field mutable after construction."));
             }
         }
 
@@ -108,15 +118,16 @@ public class FieldAnalyzer {
         boolean isMutableCollectionInterface = MUTABLE_COLLECTION_INTERFACES.contains(typeName);
 
         if (isMutableCollectionImpl || isMutableCollectionInterface) {
-            violations.add(new FieldViolation(
-                    field.getName(),
-                    typeName,
-                    ViolationType.MUTABLE_COLLECTION_FIELD,
-                    String.format(
-                            "Field is declared as a mutable collection type '%s'. " +
-                            "Consider using an unmodifiable wrapper or immutable collection. " +
-                            "Mutable shared collections are not thread-safe.", typeName)
-            ));
+            violations.add(
+                    new FieldViolation(
+                            field.getName(),
+                            typeName,
+                            ViolationType.MUTABLE_COLLECTION_FIELD,
+                            String.format(
+                                    "Field is declared as a mutable collection type '%s'. "
+                                            + "Consider using an unmodifiable wrapper or immutable collection. "
+                                            + "Mutable shared collections are not thread-safe.",
+                                    typeName)));
         }
     }
 }

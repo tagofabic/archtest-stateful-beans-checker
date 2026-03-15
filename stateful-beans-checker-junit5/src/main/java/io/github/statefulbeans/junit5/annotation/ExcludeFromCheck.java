@@ -9,9 +9,8 @@ import java.lang.annotation.Target;
 /**
  * Marks a Spring Bean class as deliberately excluded from the stateful-bean check.
  *
- * <p>Use this when a bean intentionally holds mutable state and you have taken
- * other measures (e.g. synchronisation, concurrent data structures) to make it
- * safe. Annotate the bean class itself:</p>
+ * <p>Use this when a bean intentionally holds mutable state and you have taken other measures (e.g.
+ * synchronisation, concurrent data structures) to make it safe. Annotate the bean class itself:
  *
  * <pre>{@code
  * @Service
@@ -26,8 +25,6 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ExcludeFromCheck {
 
-    /**
-     * Optional human-readable justification for excluding this class.
-     */
+    /** Optional human-readable justification for excluding this class. */
     String reason() default "";
 }

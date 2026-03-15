@@ -2,7 +2,6 @@ package io.github.statefulbeans.core.analyzer;
 
 import io.github.statefulbeans.core.model.ViolationType;
 import io.github.statefulbeans.core.util.AnnotationNames;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +9,12 @@ import java.util.List;
 /**
  * Detects Lombok annotations at the class level that imply generated mutability.
  *
- * <p>Detection is done by annotation type name so the library can operate
- * independently of whether Lombok is on the test classpath.</p>
+ * <p>Detection is done by annotation type name so the library can operate independently of whether
+ * Lombok is on the test classpath.
  */
 public class LombokClassAnalyzer {
 
-    /**
-     * Returns class-level {@link ViolationType}s related to Lombok on the given class.
-     */
+    /** Returns class-level {@link ViolationType}s related to Lombok on the given class. */
     public List<ViolationType> analyzeClass(Class<?> clazz) {
         List<ViolationType> violations = new ArrayList<>();
 
@@ -41,9 +38,9 @@ public class LombokClassAnalyzer {
     }
 
     /**
-     * Returns {@code true} if the class carries {@code @lombok.Value},
-     * which Lombok uses to generate an immutable value class (all fields final,
-     * no setters). Such beans are considered safe.
+     * Returns {@code true} if the class carries {@code @lombok.Value}, which Lombok uses to
+     * generate an immutable value class (all fields final, no setters). Such beans are considered
+     * safe.
      */
     public boolean isLombokImmutable(Class<?> clazz) {
         for (Annotation annotation : clazz.getAnnotations()) {

@@ -1,24 +1,21 @@
 package io.github.statefulbeans.core;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import io.github.statefulbeans.core.analyzer.FieldAnalyzer;
 import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.FieldViolation;
 import io.github.statefulbeans.core.model.ViolationType;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class FieldAnalyzerTest {
 
     private final FieldAnalyzer analyzer = new FieldAnalyzer();
 
     private StatefulBeanCheckConfig defaultConfig() {
-        return StatefulBeanCheckConfig.builder()
-                .packages("io.github.statefulbeans.core")
-                .build();
+        return StatefulBeanCheckConfig.builder().packages("io.github.statefulbeans.core").build();
     }
 
     // --- Fixture classes ---
@@ -34,8 +31,8 @@ class FieldAnalyzerTest {
     }
 
     static class MutableBean {
-        private String mutableName;          // non-final
-        private int mutableCount;            // non-final
+        private String mutableName; // non-final
+        private int mutableCount; // non-final
         private final String immutable = "x";
     }
 
@@ -53,24 +50,34 @@ class FieldAnalyzerTest {
 
     @Test
     void mutableBean_flagsNonFinalFields() {
-        List<FieldViolation> violations = analyzer.analyzeFields(MutableBean.class, defaultConfig());
+        List<FieldViolation> violations =
+                analyzer.analyzeFields(MutableBean.class, defaultConfig());
 
-        long nonFinalCount = violations.stream()
-                .filter(v -> v.getViolationType() == ViolationType.NON_FINAL_FIELD)
-                .count();
+        long nonFinalCount =
+                violations.stream()
+                        .filter(v -> v.getViolationType() == ViolationType.NON_FINAL_FIELD)
+                        .count();
 
-        assertEquals(2, nonFinalCount,
+        assertEquals(
+                2,
+                nonFinalCount,
                 "Expected 2 NON_FINAL_FIELD violations (mutableName, mutableCount)");
     }
 
     @Test
     void collectionBean_flagsMutableCollection() {
-        List<FieldViolation> violations = analyzer.analyzeFields(CollectionBean.class, defaultConfig());
+        List<FieldViolation> violations =
+                analyzer.analyzeFields(CollectionBean.class, defaultConfig());
 
-        boolean hasMutableCollection = violations.stream()
-                .anyMatch(v -> v.getViolationType() == ViolationType.MUTABLE_COLLECTION_FIELD);
+        boolean hasMutableCollection =
+                violations.stream()
+                        .anyMatch(
+                                v ->
+                                        v.getViolationType()
+                                                == ViolationType.MUTABLE_COLLECTION_FIELD);
 
-        assertTrue(hasMutableCollection,
+        assertTrue(
+                hasMutableCollection,
                 "Expected a MUTABLE_COLLECTION_FIELD violation for ArrayList field");
     }
 }

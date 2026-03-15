@@ -5,17 +5,16 @@ import io.github.statefulbeans.core.model.BeanViolation;
 import io.github.statefulbeans.core.model.FieldViolation;
 import io.github.statefulbeans.core.model.ViolationType;
 import io.github.statefulbeans.core.util.AnnotationNames;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Orchestrates all sub-analysers against a single bean class and produces
- * an optional {@link BeanViolation}.
+ * Orchestrates all sub-analysers against a single bean class and produces an optional {@link
+ * BeanViolation}.
  */
 public class BeanClassAnalyzer {
 
@@ -26,15 +25,15 @@ public class BeanClassAnalyzer {
     private final LombokClassAnalyzer lombokClassAnalyzer = new LombokClassAnalyzer();
 
     /**
-     * Analyses {@code clazz} and returns a {@link BeanViolation} if any
-     * statefulness issues are found, or {@link Optional#empty()} if clean.
+     * Analyses {@code clazz} and returns a {@link BeanViolation} if any statefulness issues are
+     * found, or {@link Optional#empty()} if clean.
      *
-     * @param clazz    the Spring Bean class to inspect
+     * @param clazz the Spring Bean class to inspect
      * @param beanName the logical Spring bean name (may be {@code null})
-     * @param config   analysis configuration
+     * @param config analysis configuration
      */
-    public Optional<BeanViolation> analyze(Class<?> clazz, String beanName,
-                                           StatefulBeanCheckConfig config) {
+    public Optional<BeanViolation> analyze(
+            Class<?> clazz, String beanName, StatefulBeanCheckConfig config) {
         if (isExcluded(clazz, config)) {
             log.debug("Skipping excluded class: {}", clazz.getName());
             return Optional.empty();
@@ -47,7 +46,8 @@ public class BeanClassAnalyzer {
         if (config.isLombokAware()) {
             // If @lombok.Value is present the class is fully immutable — skip it
             if (lombokClassAnalyzer.isLombokImmutable(clazz)) {
-                log.debug("Class {} carries @lombok.Value — considered immutable, skipping.",
+                log.debug(
+                        "Class {} carries @lombok.Value — considered immutable, skipping.",
                         clazz.getName());
                 return Optional.empty();
             }
@@ -64,8 +64,8 @@ public class BeanClassAnalyzer {
             return Optional.empty();
         }
 
-        return Optional.of(new BeanViolation(clazz.getName(), beanName,
-                fieldViolations, classViolations));
+        return Optional.of(
+                new BeanViolation(clazz.getName(), beanName, fieldViolations, classViolations));
     }
 
     // -------------------------------------------------------------------------
@@ -82,8 +82,7 @@ public class BeanClassAnalyzer {
 
         // Excluded by annotation
         for (Annotation annotation : clazz.getAnnotations()) {
-            if (config.getExcludedAnnotations().contains(
-                    annotation.annotationType().getName())) {
+            if (config.getExcludedAnnotations().contains(annotation.annotationType().getName())) {
                 return true;
             }
         }
@@ -92,8 +91,8 @@ public class BeanClassAnalyzer {
     }
 
     /**
-     * Returns {@code true} if the class carries at least one Spring Bean
-     * stereotype annotation (used when scanning packages without a live context).
+     * Returns {@code true} if the class carries at least one Spring Bean stereotype annotation
+     * (used when scanning packages without a live context).
      */
     public static boolean isSpringBeanClass(Class<?> clazz) {
         for (Annotation annotation : clazz.getAnnotations()) {

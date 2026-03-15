@@ -6,6 +6,7 @@ import io.github.statefulbeans.core.model.AnalysisResult;
 import io.github.statefulbeans.junit5.annotation.ExcludeFromCheck;
 import io.github.statefulbeans.spring.annotation.SpringStatefulBeanTest;
 import io.github.statefulbeans.spring.context.SpringBeanExtractor;
+import java.util.Map;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
@@ -13,14 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Map;
-
 /**
  * JUnit 5 extension that backs {@link SpringStatefulBeanTest}.
  *
- * <p>Reads the live {@code ApplicationContext} loaded by {@code @SpringBootTest},
- * extracts all user-defined beans, and runs the stateful-bean analysis using
- * the configuration declared on {@link SpringStatefulBeanTest}.</p>
+ * <p>Reads the live {@code ApplicationContext} loaded by {@code @SpringBootTest}, extracts all
+ * user-defined beans, and runs the stateful-bean analysis using the configuration declared on
+ * {@link SpringStatefulBeanTest}.
  */
 public class SpringStatefulBeanTestExtension implements BeforeAllCallback {
 
@@ -40,8 +39,8 @@ public class SpringStatefulBeanTestExtension implements BeforeAllCallback {
             applicationContext = SpringExtension.getApplicationContext(context);
         } catch (IllegalStateException e) {
             throw new IllegalStateException(
-                    "@SpringStatefulBeanTest requires a Spring ApplicationContext. " +
-                    "Add @SpringBootTest (or another Spring test annotation) to your test class.",
+                    "@SpringStatefulBeanTest requires a Spring ApplicationContext. "
+                            + "Add @SpringBootTest (or another Spring test annotation) to your test class.",
                     e);
         }
 
@@ -59,7 +58,8 @@ public class SpringStatefulBeanTestExtension implements BeforeAllCallback {
                 log.warn("Stateful bean violations detected (failOnViolation=false):\n{}", message);
             }
         } else {
-            log.info("Stateful bean check passed. {} bean(s) scanned, no violations found.",
+            log.info(
+                    "Stateful bean check passed. {} bean(s) scanned, no violations found.",
                     result.getTotalBeansScanned());
         }
     }

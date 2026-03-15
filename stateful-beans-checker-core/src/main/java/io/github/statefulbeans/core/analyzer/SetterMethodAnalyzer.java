@@ -4,7 +4,6 @@ import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.FieldViolation;
 import io.github.statefulbeans.core.model.ViolationType;
 import io.github.statefulbeans.core.util.AnnotationNames;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,16 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Detects public/package-private setter methods on a bean class that are <em>not</em>
- * Spring setter-injection points.
+ * Detects public/package-private setter methods on a bean class that are <em>not</em> Spring
+ * setter-injection points.
  *
- * <p>A method is considered a state-mutation setter when it:</p>
+ * <p>A method is considered a state-mutation setter when it:
+ *
  * <ul>
- *   <li>Is named {@code setXxx} (JavaBean convention)</li>
- *   <li>Has exactly one parameter</li>
- *   <li>Is public or package-private (not private — those are less risky)</li>
- *   <li>Is <em>not</em> annotated with a Spring/Jakarta injection annotation</li>
- *   <li>Corresponds to a field on the class (best-effort name matching)</li>
+ *   <li>Is named {@code setXxx} (JavaBean convention)
+ *   <li>Has exactly one parameter
+ *   <li>Is public or package-private (not private — those are less risky)
+ *   <li>Is <em>not</em> annotated with a Spring/Jakarta injection annotation
+ *   <li>Corresponds to a field on the class (best-effort name matching)
  * </ul>
  */
 public class SetterMethodAnalyzer {
@@ -36,20 +36,21 @@ public class SetterMethodAnalyzer {
 
             String fieldName = deriveFieldName(method.getName());
             Field correspondingField = findField(clazz, fieldName);
-            String typeName = correspondingField != null
-                    ? correspondingField.getType().getName()
-                    : method.getParameterTypes()[0].getName();
+            String typeName =
+                    correspondingField != null
+                            ? correspondingField.getType().getName()
+                            : method.getParameterTypes()[0].getName();
 
-            violations.add(new FieldViolation(
-                    fieldName,
-                    typeName,
-                    ViolationType.MUTABLE_SETTER,
-                    String.format(
-                            "Method '%s' is a public setter for field '%s'. " +
-                            "Non-injection setters on shared Spring Beans allow state " +
-                            "mutation after construction, which is not thread-safe.",
-                            method.getName(), fieldName)
-            ));
+            violations.add(
+                    new FieldViolation(
+                            fieldName,
+                            typeName,
+                            ViolationType.MUTABLE_SETTER,
+                            String.format(
+                                    "Method '%s' is a public setter for field '%s'. "
+                                            + "Non-injection setters on shared Spring Beans allow state "
+                                            + "mutation after construction, which is not thread-safe.",
+                                    method.getName(), fieldName)));
         }
 
         return violations;

@@ -5,26 +5,24 @@ import io.github.statefulbeans.core.analyzer.ClasspathPackageScanner;
 import io.github.statefulbeans.core.config.StatefulBeanCheckConfig;
 import io.github.statefulbeans.core.model.AnalysisResult;
 import io.github.statefulbeans.core.model.BeanViolation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Primary entry point for stateful-bean analysis.
  *
- * <p>Supports two scanning strategies:</p>
+ * <p>Supports two scanning strategies:
+ *
  * <ol>
- *   <li><b>Package scan</b> — Scans the classpath for classes carrying Spring
- *       stereotype annotations inside the configured packages. No Spring context
- *       is required.</li>
- *   <li><b>Bean map</b> — Analyses a pre-collected {@code Map<String, Class<?>>}
- *       of {@code beanName → beanClass} pairs (typically sourced from a live
- *       Spring {@code ApplicationContext}).</li>
+ *   <li><b>Package scan</b> — Scans the classpath for classes carrying Spring stereotype
+ *       annotations inside the configured packages. No Spring context is required.
+ *   <li><b>Bean map</b> — Analyses a pre-collected {@code Map<String, Class<?>>} of {@code beanName
+ *       → beanClass} pairs (typically sourced from a live Spring {@code ApplicationContext}).
  * </ol>
  *
  * <pre>{@code
@@ -54,14 +52,14 @@ public class StatefulBeanChecker {
     }
 
     /**
-     * Scans configured packages on the classpath, filters to Spring-annotated
-     * classes, and analyses each one.
+     * Scans configured packages on the classpath, filters to Spring-annotated classes, and analyses
+     * each one.
      */
     public AnalysisResult checkPackages() throws IOException {
         if (config.getPackagesToScan().isEmpty()) {
             throw new IllegalStateException(
-                    "No packages configured for scanning. " +
-                    "Use StatefulBeanCheckConfig.builder().packages(...).build()");
+                    "No packages configured for scanning. "
+                            + "Use StatefulBeanCheckConfig.builder().packages(...).build()");
         }
 
         List<Class<?>> candidates = new ArrayList<>();
@@ -76,20 +74,21 @@ public class StatefulBeanChecker {
     }
 
     /**
-     * Analyses a pre-supplied map of bean names to bean classes (e.g. from a
-     * Spring {@code ApplicationContext}).
+     * Analyses a pre-supplied map of bean names to bean classes (e.g. from a Spring {@code
+     * ApplicationContext}).
      *
-     * @param beanMap {@code beanName → beanClass}; class may be a CGLIB proxy —
-     *                the analyser will unwrap it automatically
+     * @param beanMap {@code beanName → beanClass}; class may be a CGLIB proxy — the analyser will
+     *     unwrap it automatically
      */
     public AnalysisResult checkBeans(Map<String, Class<?>> beanMap) {
         List<Class<?>> classes = new ArrayList<>(beanMap.size());
         List<String> names = new ArrayList<>(beanMap.size());
 
-        beanMap.forEach((name, clazz) -> {
-            classes.add(unwrapProxy(clazz));
-            names.add(name);
-        });
+        beanMap.forEach(
+                (name, clazz) -> {
+                    classes.add(unwrapProxy(clazz));
+                    names.add(name);
+                });
 
         return analyzeNamedClasses(classes, names);
     }
@@ -107,8 +106,10 @@ public class StatefulBeanChecker {
             violation.ifPresent(violations::add);
         }
 
-        log.info("Analysis complete. Scanned {} beans, found {} violations.",
-                total, violations.size());
+        log.info(
+                "Analysis complete. Scanned {} beans, found {} violations.",
+                total,
+                violations.size());
         return new AnalysisResult(violations, total);
     }
 
@@ -117,8 +118,8 @@ public class StatefulBeanChecker {
     }
 
     /**
-     * Unwraps CGLIB/Spring-generated proxy subclasses to their original target class.
-     * CGLIB proxies have "$$" in their class name.
+     * Unwraps CGLIB/Spring-generated proxy subclasses to their original target class. CGLIB proxies
+     * have "$$" in their class name.
      */
     private Class<?> unwrapProxy(Class<?> clazz) {
         if (clazz.getName().contains("$$")) {

@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Aggregates all violations found on a single Spring Bean class.
- */
+/** Aggregates all violations found on a single Spring Bean class. */
 public final class BeanViolation {
 
     private final String beanClassName;
@@ -14,15 +12,19 @@ public final class BeanViolation {
     private final List<FieldViolation> fieldViolations;
     private final List<ViolationType> classLevelViolations;
 
-    public BeanViolation(String beanClassName, String beanName,
-                         List<FieldViolation> fieldViolations,
-                         List<ViolationType> classLevelViolations) {
+    public BeanViolation(
+            String beanClassName,
+            String beanName,
+            List<FieldViolation> fieldViolations,
+            List<ViolationType> classLevelViolations) {
         this.beanClassName = Objects.requireNonNull(beanClassName, "beanClassName");
         this.beanName = beanName != null ? beanName : beanClassName;
-        this.fieldViolations = Collections.unmodifiableList(
-                Objects.requireNonNull(fieldViolations, "fieldViolations"));
-        this.classLevelViolations = Collections.unmodifiableList(
-                Objects.requireNonNull(classLevelViolations, "classLevelViolations"));
+        this.fieldViolations =
+                Collections.unmodifiableList(
+                        Objects.requireNonNull(fieldViolations, "fieldViolations"));
+        this.classLevelViolations =
+                Collections.unmodifiableList(
+                        Objects.requireNonNull(classLevelViolations, "classLevelViolations"));
     }
 
     public String getBeanClassName() {

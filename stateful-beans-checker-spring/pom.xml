@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -12,12 +10,10 @@
 
     <artifactId>stateful-beans-checker-spring</artifactId>
     <name>Stateful Beans Checker - Spring Integration</name>
-    <description>
-        Spring ApplicationContext integration for stateful-bean checks.
+    <description>Spring ApplicationContext integration for stateful-bean checks.
         Provides @SpringStatefulBeanTest composite annotation and the
         ApplicationContext listener that feeds the live bean list to the
-        JUnit 5 extension.
-    </description>
+        JUnit 5 extension.</description>
 
     <dependencies>
         <dependency>
