@@ -15,7 +15,9 @@ class FieldAnalyzerTest {
     private final FieldAnalyzer analyzer = new FieldAnalyzer();
 
     private StatefulBeanCheckConfig defaultConfig() {
-        return StatefulBeanCheckConfig.builder().packages("dev.tagofabic.statefulbeans.core").build();
+        return StatefulBeanCheckConfig.builder()
+                .packages("dev.tagofabic.statefulbeans.core")
+                .build();
     }
 
     // --- Fixture classes ---
