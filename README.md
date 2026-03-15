@@ -1,14 +1,19 @@
-# stateful-beans-checker
+# Spring Stateful Beans Checker
 
-> Catch mutable Spring Beans before they reach production.
+> Catch mutable Spring Beans way before they reach production.
 
-A lightweight, ArchUnit-style test library that detects stateful or mutable Spring Beans that are unsafe under high concurrency. Works with **package scanning** (no Spring context required) or **live `ApplicationContext` inspection** via `@SpringBootTest`.
+A lightweight, ArchUnit-style test library that detects stateful or mutable Spring Beans that are unsafe under high concurrency. 
+Works with **package scanning** (no Spring context required) or **live `ApplicationContext` inspection** via `@SpringBootTest`.
 
 ---
 
 ## Why
 
-Spring Beans are singletons by default. A single mutable field — an `ArrayList`, a non-final counter, a Lombok `@Data` annotation — can silently cause race conditions under load. This library surfaces those issues at test time, before they become production incidents.
+Spring Beans are singletons by default. A single mutable field — an `ArrayList`, a non-final counter, a Lombok `@Data` 
+annotation — can silently cause race conditions under load. This library surfaces those issues at test time, before they 
+become production incidents.
+
+This just provides that extra guardrail that might be missed during the Code Review process.
 
 ---
 
