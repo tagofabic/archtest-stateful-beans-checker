@@ -22,6 +22,7 @@ Works with **package scanning** (no Spring context required) or **live `Applicat
 - [How it Works](#how-it-works)
 - [Module Structure](#module-structure)
 - [License](#license)
+- [AI Disclosure](#ai-disclosure)
 
 ---
 
@@ -65,7 +66,7 @@ Add the modules you need to your Maven `pom.xml` (test scope):
 </dependency>
 ```
 
-**Requirements:** Java 17+, JUnit 5, Spring Framework 6 / Spring Boot 3.
+**Requirements:** Java 21+, JUnit 5, Spring Framework 6 / Spring Boot 3.
 
 ---
 
@@ -233,3 +234,9 @@ StatefulBeanCheckExtension  ──(BeforeAll)──►  StatefulBeanChecker
 ## License
 
 [Apache 2.0](LICENSE)
+
+---
+
+## AI Disclosure
+
+This project was kickstarted with the assistance of [Claude](https://claude.ai) (Anthropic's AI assistant). All code has been reviewed and is maintained by the project author.
