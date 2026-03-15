@@ -19,7 +19,7 @@ Add the modules you need to your Maven `pom.xml` (test scope):
 ```xml
 <!-- Core engine — always required -->
 <dependency>
-    <groupId>io.github.stateful-beans-checker</groupId>
+    <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-core</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <scope>test</scope>
@@ -27,7 +27,7 @@ Add the modules you need to your Maven `pom.xml` (test scope):
 
 <!-- JUnit 5 integration (package scan mode) -->
 <dependency>
-    <groupId>io.github.stateful-beans-checker</groupId>
+    <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-junit5</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <scope>test</scope>
@@ -35,7 +35,7 @@ Add the modules you need to your Maven `pom.xml` (test scope):
 
 <!-- Spring Boot integration (@SpringBootTest mode) -->
 <dependency>
-    <groupId>io.github.stateful-beans-checker</groupId>
+    <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-spring</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <scope>test</scope>
