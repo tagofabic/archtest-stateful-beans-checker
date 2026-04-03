@@ -3,6 +3,7 @@ package dev.tagofabic.statefulbeans.core.analyzer;
 import dev.tagofabic.statefulbeans.core.model.ViolationType;
 import dev.tagofabic.statefulbeans.core.util.AnnotationNames;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +30,23 @@ public class LombokClassAnalyzer {
                 violations.add(ViolationType.LOMBOK_SETTER);
             }
 
-            // @lombok.Value makes the class immutable — not a violation.
-            // @lombok.Builder alone is OK; @Singular within a @Builder
-            // is checked separately at field level if needed.
+            if (AnnotationNames.LOMBOK_BUILDER.equals(name) && hasSingularField(clazz)) {
+                violations.add(ViolationType.LOMBOK_SINGULAR_BUILDER);
+            }
         }
 
         return violations;
+    }
+
+    private boolean hasSingularField(Class<?> clazz) {
+        for (Field field : clazz.getDeclaredFields()) {
+            for (Annotation annotation : field.getAnnotations()) {
+                if (AnnotationNames.LOMBOK_SINGULAR.equals(annotation.annotationType().getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
