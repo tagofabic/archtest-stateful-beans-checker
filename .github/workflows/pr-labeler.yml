@@ -23,7 +23,7 @@ jobs:
             LABEL="feature"
           elif [[ "$BRANCH" == bugfix/* || "$BRANCH" == bug/* ]]; then
             LABEL="bug"
-          elif [[ "$BRANCH" == doc/* || "$BRANCH" == docs/* ]]; then
+          elif [[ "$BRANCH" == doc/* || "$BRANCH" == docs/* || "$BRANCH" == documentation/* ]]; then
             LABEL="documentation"
           else
             echo "Branch '$BRANCH' does not match any known pattern — skipping."

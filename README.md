@@ -1,7 +1,10 @@
 # Spring Stateful Beans Checker
 
 [![Build](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/ci.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-core)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-core)
+[![annotations](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-annotations?label=annotations&logo=apachemaven&logoColor=white&color=blue)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-annotations)
+[![core](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-core?label=core&logo=apachemaven&logoColor=white&color=blue)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-core)
+[![junit5](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-junit5?label=junit5&logo=apachemaven&logoColor=white&color=blue)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-junit5)
+[![spring](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-spring?label=spring&logo=apachemaven&logoColor=white&color=blue)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-spring)
 
 > Catch mutable Spring Beans way before they reach production.
 
