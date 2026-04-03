@@ -4,7 +4,7 @@
 
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>Stateful Beans Checker - Parent</name>
@@ -19,6 +19,9 @@
     </modules>
 
     <properties>
+        <!-- Single version source of truth — change only here -->
+        <revision>0.2.0-SNAPSHOT</revision>
+
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -183,6 +186,32 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
+            </plugin>
+            <!-- Resolves ${revision} to a literal version in installed/published poms -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <phase>clean</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

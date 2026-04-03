@@ -27,3 +27,7 @@ replay_pid*
 
 target/
 */target/
+
+# Maven flatten plugin output
+.flattened-pom.xml
+*/.flattened-pom.xml

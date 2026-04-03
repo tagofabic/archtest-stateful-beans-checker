@@ -5,7 +5,7 @@
     <parent>
         <groupId>dev.tagofabic</groupId>
         <artifactId>stateful-beans-checker-parent</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>stateful-beans-checker-junit5</artifactId>
