@@ -30,8 +30,8 @@ jobs:
             exit 0
           fi
 
-          # Create the label if it doesn't exist yet
-          gh label create "$LABEL" --repo "$REPO" --force
+          # Create the label if it doesn't exist yet (skip if already present to preserve custom color/description)
+          gh label create "$LABEL" --repo "$REPO" 2>/dev/null || true
 
           gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "$LABEL"
           echo "Applied label '$LABEL' to PR #$PR_NUMBER"
