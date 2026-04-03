@@ -70,8 +70,8 @@
         <lombok.version>1.18.34</lombok.version>
 
         <!-- Spotless -->
-        <spotless.version>2.43.0</spotless.version>
-        <google-java-format.version>1.22.0</google-java-format.version>
+        <spotless.version>2.44.0</spotless.version>
+        <google-java-format.version>1.24.0</google-java-format.version>
     </properties>
 
     <dependencyManagement>
