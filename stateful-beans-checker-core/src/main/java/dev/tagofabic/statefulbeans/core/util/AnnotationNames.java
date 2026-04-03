@@ -10,6 +10,10 @@ public final class AnnotationNames {
 
     private AnnotationNames() {}
 
+    // --- Spring configuration ---
+    public static final String CONFIGURATION_PROPERTIES =
+            "org.springframework.boot.context.properties.ConfigurationProperties";
+
     // --- Spring stereotypes ---
     public static final String COMPONENT = "org.springframework.stereotype.Component";
     public static final String SERVICE = "org.springframework.stereotype.Service";
@@ -47,12 +51,7 @@ public final class AnnotationNames {
     // --- Lombok annotations ---
     public static final String LOMBOK_DATA = "lombok.Data";
     public static final String LOMBOK_SETTER = "lombok.Setter";
-    public static final String LOMBOK_GETTER = "lombok.Getter";
     public static final String LOMBOK_VALUE = "lombok.Value"; // immutable – OK
     public static final String LOMBOK_BUILDER = "lombok.Builder";
     public static final String LOMBOK_SINGULAR = "lombok.Singular";
-
-    /** Lombok annotations that imply mutability at the class level. */
-    public static final Set<String> LOMBOK_MUTABLE_CLASS_ANNOTATIONS =
-            Set.of(LOMBOK_DATA, LOMBOK_SETTER);
 }

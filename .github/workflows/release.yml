@@ -79,11 +79,15 @@ jobs:
         run: |
           sed -i "s|<revision>.*</revision>|<revision>${{ steps.version.outputs.version }}</revision>|" pom.xml
 
+      - name: Update README version
+        run: |
+          sed -i "s|<version>[0-9]*\.[0-9]*\.[0-9]*</version>|<version>${{ steps.version.outputs.version }}</version>|g" README.md
+
       - name: Commit version update
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pom.xml
+          git add pom.xml README.md
           git commit -m "Release ${{ steps.version.outputs.version }} [skip ci]"
           git push
 

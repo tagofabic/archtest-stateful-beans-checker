@@ -1,5 +1,8 @@
 # Spring Stateful Beans Checker
 
+[![Build](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/release.yml/badge.svg)](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/release.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-core)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-core)
+
 > Catch mutable Spring Beans way before they reach production.
 
 A lightweight, ArchUnit-style test library that detects stateful or mutable Spring Beans that are unsafe under high concurrency. 
@@ -39,7 +42,7 @@ This just provides that extra guardrail that might be missed during the Code Rev
 
 ## Installation
 
-Add the modules you need to your Maven `pom.xml`.
+All modules are published to [Maven Central](https://central.sonatype.com/namespace/dev.tagofabic). Add the ones you need to your Maven `pom.xml`.
 
 ```xml
 <!--
@@ -110,7 +113,13 @@ Combines with `@SpringBootTest` to inspect only the beans actually wired in your
 ```java
 @SpringStatefulBeanTest(lombokAware = true)
 @SpringBootTest
-class StatefulBeanArchTest {}
+class StatefulBeanArchTest {
+
+    @Test
+    void statefulBeansCheck() {
+        // Violations are caught by @SpringStatefulBeanTest before this runs
+    }
+}
 ```
 
 ---
@@ -155,6 +164,7 @@ For annotated code examples of each violation and thread-safe alternatives, see 
 - `ThreadLocal` fields (opt-out via `allowThreadLocalFields = false`).
 - `static` fields and compiler-generated synthetic fields.
 - Classes annotated with `@lombok.Value` (all fields are effectively final).
+- Classes annotated with `@ConfigurationProperties` — their fields and setters exist for property binding at startup, not runtime mutation.
 
 ---
 
