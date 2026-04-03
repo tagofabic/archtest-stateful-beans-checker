@@ -10,6 +10,23 @@
     <name>Stateful Beans Checker - Parent</name>
     <description>A library for detecting mutable/stateful Spring Beans that may cause issues
         under high-throughput concurrent environments.</description>
+    <url>https://github.com/tagofabic/archtest-stateful-beans-checker</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>tagofabic</id>
+            <name>tagofabic</name>
+            <url>https://github.com/tagofabic</url>
+        </developer>
+    </developers>
 
     <modules>
         <module>stateful-beans-checker-annotations</module>
@@ -18,14 +35,31 @@
         <module>stateful-beans-checker-spring</module>
     </modules>
 
+    <scm>
+        <connection>scm:git:git://github.com/tagofabic/archtest-stateful-beans-checker.git</connection>
+        <developerConnection>scm:git:ssh://github.com/tagofabic/archtest-stateful-beans-checker.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/tagofabic/archtest-stateful-beans-checker</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/tagofabic/archtest-stateful-beans-checker/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/tagofabic/archtest-stateful-beans-checker/actions</url>
+    </ciManagement>
+
     <properties>
         <!-- Single version source of truth — change only here -->
         <revision>0.2.0-SNAPSHOT</revision>
 
         <java.version>21</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency versions -->
         <spring.version>6.1.14</spring.version>
@@ -119,10 +153,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.13.0</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -215,4 +245,84 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <!--
+                Activated only for releases: mvn deploy -P release
+                Requires:
+                  - GPG key available in the local keyring
+                  - ~/.m2/settings.xml with a <server id="central"> entry containing
+                    your Sonatype Central Portal token (username + password)
+            -->
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Attach sources JAR -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Attach Javadoc JAR -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- GPG-sign all artifacts -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Publish to Maven Central via Sonatype Central Portal -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- Matches <server id="central"> in ~/.m2/settings.xml -->
+                            <publishingServerId>central</publishingServerId>
+                            <!--
+                                false = upload to the portal staging area so you can
+                                review before clicking Publish. Set to true to release
+                                automatically without manual confirmation.
+                            -->
+                            <autoPublish>false</autoPublish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
