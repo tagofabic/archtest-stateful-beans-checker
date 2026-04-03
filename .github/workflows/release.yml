@@ -1,0 +1,98 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write # needed to push the version commit, tag, and create the release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history needed to read existing tags
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          # Generates ~/.m2/settings.xml with a <server id="central"> entry
+          # populated from the MAVEN_CENTRAL_USERNAME / MAVEN_CENTRAL_PASSWORD env vars
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_PASSWORD
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d | gpg --batch --import
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
+        # GPG_PRIVATE_KEY = base64-encoded armored private key
+        # Export locally with: gpg --export-secret-keys --armor <KEY_ID> | base64
+
+      - name: Calculate next version
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MAJOR=${{ vars.RELEASE_MAJOR_VERSION }}
+          MINOR=${{ vars.RELEASE_MINOR_VERSION }}
+
+          # Get the latest release tag; default to v0.0.-1 so patch becomes 0 on first run
+          LATEST=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || echo "v0.0.-1")
+          LATEST_VERSION=${LATEST#v}
+          LATEST_MAJOR=$(echo "$LATEST_VERSION" | cut -d. -f1)
+          LATEST_MINOR=$(echo "$LATEST_VERSION" | cut -d. -f2)
+          LATEST_PATCH=$(echo "$LATEST_VERSION" | cut -d. -f3)
+
+          if [ "$LATEST_MAJOR" = "$MAJOR" ] && [ "$LATEST_MINOR" = "$MINOR" ]; then
+            PATCH=$((LATEST_PATCH + 1))
+          else
+            PATCH=0
+          fi
+
+          NEXT_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Resolved next version: $NEXT_VERSION"
+
+      - name: Update POM version
+        run: |
+          sed -i "s|<revision>.*</revision>|<revision>${{ steps.version.outputs.version }}</revision>|" pom.xml
+
+      - name: Build and deploy to Maven Central
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: mvn clean deploy -P release --no-transfer-progress
+
+      - name: Commit version update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pom.xml
+          git commit -m "Release ${{ steps.version.outputs.version }} [skip ci]"
+          git push
+
+      - name: Tag and create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag v${{ steps.version.outputs.version }}
+          git push origin v${{ steps.version.outputs.version }}
+          gh release create v${{ steps.version.outputs.version }} \
+            --title "v${{ steps.version.outputs.version }}" \
+            --generate-notes

@@ -54,7 +54,7 @@
 
     <properties>
         <!-- Single version source of truth — change only here -->
-        <revision>0.2.0-SNAPSHOT</revision>
+        <revision>0.2.0</revision>
 
         <java.version>21</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
@@ -293,6 +293,13 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.2.4</version>
+                        <configuration>
+                            <!-- Required for non-interactive signing in CI -->
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
