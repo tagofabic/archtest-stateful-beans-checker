@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # full history needed to read existing release tags
+          token: ${{ secrets.RELEASE_PAT }}
 
       - name: Calculate next version
         id: version
