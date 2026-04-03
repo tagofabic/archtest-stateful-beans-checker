@@ -72,7 +72,8 @@ public class BeanClassAnalyzer {
     // -------------------------------------------------------------------------
 
     private boolean isExcluded(Class<?> clazz, StatefulBeanCheckConfig config) {
-        // @ConfigurationProperties beans use setters/non-final fields for property binding by design
+        // @ConfigurationProperties beans use setters/non-final fields for property binding by
+        // design
         if (hasAnnotationNamed(clazz, AnnotationNames.CONFIGURATION_PROPERTIES)) return true;
 
         // Excluded by @ExcludeFromStatefulCheck on the class
