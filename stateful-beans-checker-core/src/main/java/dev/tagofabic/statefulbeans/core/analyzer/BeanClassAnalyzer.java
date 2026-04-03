@@ -72,6 +72,10 @@ public class BeanClassAnalyzer {
     // -------------------------------------------------------------------------
 
     private boolean isExcluded(Class<?> clazz, StatefulBeanCheckConfig config) {
+        // Generated classes (OpenAPI, MapStruct, QueryDSL, etc.) are mutable by design
+        if (hasAnnotationNamed(clazz, AnnotationNames.JAKARTA_GENERATED)) return true;
+        if (hasAnnotationNamed(clazz, AnnotationNames.JAVAX_GENERATED)) return true;
+
         // @ConfigurationProperties beans use setters/non-final fields for property binding by
         // design
         if (hasAnnotationNamed(clazz, AnnotationNames.CONFIGURATION_PROPERTIES)) return true;
