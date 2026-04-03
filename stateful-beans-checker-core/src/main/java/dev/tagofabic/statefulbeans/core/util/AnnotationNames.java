@@ -54,5 +54,4 @@ public final class AnnotationNames {
     public static final String LOMBOK_VALUE = "lombok.Value"; // immutable – OK
     public static final String LOMBOK_BUILDER = "lombok.Builder";
     public static final String LOMBOK_SINGULAR = "lombok.Singular";
-
 }
