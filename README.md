@@ -52,14 +52,14 @@ All modules are published to [Maven Central](https://central.sonatype.com/namesp
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-annotations</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.3.2</version>
 </dependency>
 
 <!-- Core engine — test scope -->
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-core</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.3.2</version>
     <scope>test</scope>
 </dependency>
 
@@ -67,7 +67,7 @@ All modules are published to [Maven Central](https://central.sonatype.com/namesp
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-junit5</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.3.2</version>
     <scope>test</scope>
 </dependency>
 
@@ -75,7 +75,7 @@ All modules are published to [Maven Central](https://central.sonatype.com/namesp
 <dependency>
     <groupId>dev.tagofabic</groupId>
     <artifactId>stateful-beans-checker-spring</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.3.2</version>
     <scope>test</scope>
 </dependency>
 ```
