@@ -1,0 +1,37 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Apply label based on branch name
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.head_ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [[ "$BRANCH" == feature/* ]]; then
+            LABEL="feature"
+          elif [[ "$BRANCH" == bugfix/* || "$BRANCH" == bug/* ]]; then
+            LABEL="bug"
+          elif [[ "$BRANCH" == doc/* || "$BRANCH" == docs/* ]]; then
+            LABEL="documentation"
+          else
+            echo "Branch '$BRANCH' does not match any known pattern — skipping."
+            exit 0
+          fi
+
+          # Create the label if it doesn't exist yet
+          gh label create "$LABEL" --repo "$REPO" --force
+
+          gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "$LABEL"
+          echo "Applied label '$LABEL' to PR #$PR_NUMBER"
