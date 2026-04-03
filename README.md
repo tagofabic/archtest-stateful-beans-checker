@@ -140,12 +140,12 @@ if (!result.getViolations().isEmpty()) {
 
 | Violation | Description |
 |---|---|
-| `NON_FINAL_FIELD` | Instance field not declared `final` |
-| `MUTABLE_SETTER` | Public or package-private setter on an instance field |
-| `MUTABLE_COLLECTION_FIELD` | Field of a mutable collection type (`ArrayList`, `HashMap`, `HashSet`, `List`, `Map`, `Set`, …) |
-| `LOMBOK_DATA` | Class annotated with `@lombok.Data` (generates setters for all fields) |
-| `LOMBOK_SETTER` | Class or field annotated with `@lombok.Setter` |
-| `LOMBOK_SINGULAR_BUILDER` | Builder with `@Singular` — accumulates mutable state |
+| [`NON_FINAL_FIELD`](docs/antipatterns.md#non_final_field) | Instance field not declared `final` |
+| [`MUTABLE_SETTER`](docs/antipatterns.md#mutable_setter) | Public or package-private setter on an instance field |
+| [`MUTABLE_COLLECTION_FIELD`](docs/antipatterns.md#mutable_collection_field) | Field of a mutable collection type (`ArrayList`, `HashMap`, `HashSet`, `List`, `Map`, `Set`, …) |
+| [`LOMBOK_DATA`](docs/antipatterns.md#lombok_data) | Class annotated with `@lombok.Data` (generates setters for all fields) |
+| [`LOMBOK_SETTER`](docs/antipatterns.md#lombok_setter) | Class or field annotated with `@lombok.Setter` |
+| [`LOMBOK_SINGULAR_BUILDER`](docs/antipatterns.md#lombok_singular_builder) | Builder with `@Singular` — accumulates mutable state |
 
 For annotated code examples of each violation and thread-safe alternatives, see the **[Antipatterns guide](docs/antipatterns.md)**.
 
@@ -202,7 +202,8 @@ public class OrderService {
 }
 ```
 
-The `reason` field forces an explicit justification at the call site.
+The `reason` field forces an explicit justification at the call site. For a worked example of when exclusion is 
+appropriate, see [Intentionally Mutable Beans](docs/antipatterns.md#intentionally-mutable-beans) in the antipatterns guide.
 
 ---
 
