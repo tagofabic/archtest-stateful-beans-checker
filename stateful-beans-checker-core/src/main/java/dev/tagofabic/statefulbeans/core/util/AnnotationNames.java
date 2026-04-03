@@ -10,6 +10,10 @@ public final class AnnotationNames {
 
     private AnnotationNames() {}
 
+    // --- Generated code markers ---
+    public static final String JAKARTA_GENERATED = "jakarta.annotation.Generated";
+    public static final String JAVAX_GENERATED = "javax.annotation.Generated";
+
     // --- Spring configuration ---
     public static final String CONFIGURATION_PROPERTIES =
             "org.springframework.boot.context.properties.ConfigurationProperties";

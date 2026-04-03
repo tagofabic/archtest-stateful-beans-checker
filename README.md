@@ -168,6 +168,8 @@ For annotated code examples of each violation and thread-safe alternatives, see 
 - `static` fields and compiler-generated synthetic fields.
 - Classes annotated with `@lombok.Value` (all fields are effectively final).
 - Classes annotated with `@ConfigurationProperties` — their fields and setters exist for property binding at startup, not runtime mutation.
+- Classes annotated with `@jakarta.annotation.Generated` or `@javax.annotation.Generated` — generated code (OpenAPI, MapStruct,
+  QueryDSL, etc.) is mutable by design and not subject to the same rules as hand-written beans.
 
 ---
 
