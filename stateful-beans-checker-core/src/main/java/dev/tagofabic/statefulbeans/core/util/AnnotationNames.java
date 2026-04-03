@@ -10,6 +10,10 @@ public final class AnnotationNames {
 
     private AnnotationNames() {}
 
+    // --- Spring configuration ---
+    public static final String CONFIGURATION_PROPERTIES =
+            "org.springframework.boot.context.properties.ConfigurationProperties";
+
     // --- Spring stereotypes ---
     public static final String COMPONENT = "org.springframework.stereotype.Component";
     public static final String SERVICE = "org.springframework.stereotype.Service";
