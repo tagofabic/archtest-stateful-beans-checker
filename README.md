@@ -1,6 +1,6 @@
 # Spring Stateful Beans Checker
 
-[![Build](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/release.yml/badge.svg)](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/release.yml)
+[![Build](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/tagofabic/archtest-stateful-beans-checker/actions/workflows/ci.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/dev.tagofabic/stateful-beans-checker-core)](https://central.sonatype.com/artifact/dev.tagofabic/stateful-beans-checker-core)
 
 > Catch mutable Spring Beans way before they reach production.

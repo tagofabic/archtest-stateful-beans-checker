@@ -1,7 +1,9 @@
 name: Prepare & Create Release
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [main]
 
 permissions:
@@ -9,36 +11,11 @@ permissions:
 
 jobs:
 
-  # Runs automatically on every push to main.
-  # Compiles and tests — no versioning, no signing, no publishing.
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-
-      - name: Build and test
-        run: mvn clean verify --no-transfer-progress
-
   # Pauses for manual approval via the 'release' GitHub environment.
   # On approval: calculates the next version, updates the POM, and commits it to main.
   # Settings → Environments → release → add yourself as required reviewer.
   release:
-    needs: build
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment: release
     outputs:
@@ -81,7 +58,7 @@ jobs:
 
       - name: Update README version
         run: |
-          sed -i "s|<version>[0-9]*\.[0-9]*\.[0-9]*</version>|<version>${{ steps.version.outputs.version }}</version>|g" README.md
+          sed -i -E "s|<version>[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?</version>|<version>${{ steps.version.outputs.version }}</version>|g" README.md
 
       - name: Commit version update
         run: |
