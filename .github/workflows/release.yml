@@ -87,8 +87,18 @@ jobs:
           git commit -m "Release ${{ steps.version.outputs.version }} [skip ci]"
           git push
 
+      - name: Tag and create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag v${{ steps.version.outputs.version }}
+          git push origin v${{ steps.version.outputs.version }}
+          gh release create v${{ steps.version.outputs.version }} \
+            --title "v${{ steps.version.outputs.version }}" \
+            --generate-notes
+
   # Pauses for a second manual approval via the 'publish' GitHub environment.
-  # On approval: signs and deploys to Maven Central, tags the commit, and creates the GitHub release.
+  # On approval: signs and deploys to Maven Central.
   # Settings → Environments → publish → add yourself as required reviewer.
   publish:
     needs: release
@@ -131,13 +141,3 @@ jobs:
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: mvn clean deploy -P release --no-transfer-progress
-
-      - name: Tag and create GitHub release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git tag v${{ needs.release.outputs.version }}
-          git push origin v${{ needs.release.outputs.version }}
-          gh release create v${{ needs.release.outputs.version }} \
-            --title "v${{ needs.release.outputs.version }}" \
-            --generate-notes
