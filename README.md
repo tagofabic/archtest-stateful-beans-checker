@@ -16,8 +16,9 @@ Works with **package scanning** (no Spring context required) or **live `Applicat
   - [Option 2 — Spring context (@SpringBootTest)](#option-2--spring-context-springboottest)
   - [Option 3 — Programmatic API](#option-3--programmatic-api)
 - [What gets flagged](#what-gets-flagged)
+  - [Antipatterns guide](docs/antipatterns.md)
 - [Configuration reference](#configuration-reference)
-- [Excluding a Specific Bean](#excluding-a-specific-bean)
+- [Excluding a Specific Bean](#excluding-a-specific-bean-or-field)
 - [Example failure output](#example-failure-output)
 - [How it Works](#how-it-works)
 - [Module Structure](#module-structure)
@@ -135,7 +136,7 @@ if (!result.getViolations().isEmpty()) {
 
 ---
 
-## What gets flagged
+## What Gets Flagged
 
 | Violation | Description |
 |---|---|
@@ -146,7 +147,9 @@ if (!result.getViolations().isEmpty()) {
 | `LOMBOK_SETTER` | Class or field annotated with `@lombok.Setter` |
 | `LOMBOK_SINGULAR_BUILDER` | Builder with `@Singular` — accumulates mutable state |
 
-### What is automatically allowed
+For annotated code examples of each violation and thread-safe alternatives, see the **[Antipatterns guide](docs/antipatterns.md)**.
+
+### What is Automatically Allowed
 
 - Fields annotated with `@Autowired`, `@Value`, `@Inject`, or `@Resource` (injection points).
 - `ThreadLocal` fields (opt-out via `allowThreadLocalFields = false`).
@@ -155,7 +158,7 @@ if (!result.getViolations().isEmpty()) {
 
 ---
 
-## Configuration reference
+## Configuration Reference
 
 All options are available on both `@StatefulBeanCheck`, `@SpringStatefulBeanTest`, and `StatefulBeanCheckConfig`.
 
@@ -172,7 +175,7 @@ All options are available on both `@StatefulBeanCheck`, `@SpringStatefulBeanTest
 
 ---
 
-## Excluding a Specific Bean
+## Excluding a Specific Bean or Field
 
 In cases (hopefully rare) where a bean or field is intentionally mutable, you can exclude it from the check using `@ExcludeFromStatefulCheck` from the `stateful-beans-checker-annotations` dependency.
 
@@ -203,7 +206,7 @@ The `reason` field forces an explicit justification at the call site.
 
 ---
 
-## Example failure output
+## Example Failure Output
 
 ```
 StatefulBeanChecker found 2 violation(s) across 47 beans:
