@@ -54,7 +54,7 @@
 
     <properties>
         <!-- Single version source of truth — change only here -->
-        <revision>0.3.5</revision>
+        <revision>0.3.6</revision>
 
         <java.version>21</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
