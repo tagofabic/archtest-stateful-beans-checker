@@ -13,6 +13,24 @@
     <description>Zero-dependency annotations for stateful-beans-checker.
         Add this as a compile dependency so production bean classes can use
         @ExcludeFromStatefulCheck without pulling in test or analysis dependencies.</description>
+    <url>https://github.com/tagofabic/archtest-stateful-beans-checker</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/tagofabic/archtest-stateful-beans-checker.git</connection>
+        <developerConnection>scm:git:ssh://github.com/tagofabic/archtest-stateful-beans-checker.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/tagofabic/archtest-stateful-beans-checker</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/tagofabic/archtest-stateful-beans-checker/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/tagofabic/archtest-stateful-beans-checker/actions</url>
+    </ciManagement>
 
     <!-- No dependencies — intentionally empty -->
 
